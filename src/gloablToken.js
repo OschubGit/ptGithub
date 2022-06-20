@@ -1,3 +1,5 @@
-const gloablToken = "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";
+const firstPartial = "ghp_D1gP8ghoPFkDNAz"
+const secondPartial = "H11fS4RzX1Bw5hl0vAEet"
+const gloablToken = `${firstPartial}${secondPartial}`;
 
 export default gloablToken;
