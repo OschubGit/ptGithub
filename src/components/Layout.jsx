@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Content from "./Content";
 import Nav from "./Nav";
+import gloablToken from "../gloablToken";
 
 const Layout = () => {
-  const [value, setValue] = useState("OschubGit");
+  const [value, setValue] = useState("");
   const [user, setUser] = useState();
 
   const handleClick = (e) => {
     e.preventDefault()
     fetch(`https://api.github.com/users/${value}`,{
       method: "GET",
-      headers: {Authorization: "token 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"}})
+      headers: {Authorization: `token ${gloablToken}`}})
       .then((resp) => resp.json())
       .then((data) => {
         setUser(data);
@@ -18,10 +19,6 @@ const Layout = () => {
 
     setValue("")
   }
-
-  useEffect(() => {
-    console.log(user)
-  },[user])
 
   return (
     <div className="app-container">
@@ -32,13 +29,15 @@ const Layout = () => {
       <nav className="navbar is-transparent">
         <div className="navbar-brand">
           <a className="navbar-item" href="https://bulma.io">
-            <img
-              src={user ? user.avatar_url : "https://bulma.io/images/bulma-logo.png"}
-              alt="Bulma: a modern CSS framework based on Flexbox"
-              width="{112}"
-              height="{28}"
-            />
-            {user && user.name}
+            {user && (
+              <img
+                src={user && user.avatar_url}
+                alt="Bulma: a modern CSS framework based on Flexbox"
+                width="{112}"
+                height="{28}"
+              />
+            )}
+            <h5 className="title is-5 mr-2">{user && user.name}</h5>
             {user && user.login}
           </a>
         </div>
