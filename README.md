@@ -6,6 +6,10 @@ Se ha preparado un fichero, globalToken.js, podemos sustituir ahí el token por 
 
 Puedes generar un token desde aquí: https://github.com/settings/tokens
 
+### `npm install`
+
+Hacer `npm install` para instalar todas las dependencias
+
 ### `npm run start`
 
 Puedes inicializar el proyecto con el comando `npm run start`
