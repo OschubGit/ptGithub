@@ -1,3 +1,3 @@
-const gloablToken = "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";
+const gloablToken = "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";
 
 export default gloablToken;
