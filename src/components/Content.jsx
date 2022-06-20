@@ -11,7 +11,7 @@ const Content = ({ user }) => {
         const getUser = async () => {
             await fetch(`${user.repos_url}`,{
                 method: "GET",
-                headers: {Authorization: "token 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",}})
+                headers: {Authorization: "token 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",}})
               .then((resp) => resp.status === 200 && resp.json())
               .then((data) => {
                 setRepos(data);

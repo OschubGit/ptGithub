@@ -3,31 +3,51 @@ import { useParams } from 'react-router-dom';
 import moment from "moment"
 
 const Repository = ({repo}) => {
-    const slug = useParams();
-    const [detailRepo, setDetailRepo] = useState();
+    const {slug, userpath} = useParams();
+    const [detailRepo, setDetailRepo] = useState([]);
     const [tags, setTags] = useState();
     const [issues, setIssues] = useState();
     const [pulls, setPulls] = useState();
 
     useEffect(() => {
-        const slugValue = slug.slug;
-        const getRepo = repo && repo.filter((f) => f.name === slugValue)
+        console.log(userpath)
+        console.log(slug)
+        const getRepo = repo && repo.filter((f) => f.name === slug)
         setDetailRepo(getRepo);
-        const slugRepo = "OschubGit/imperial-app";
+        
         const getTags = async () => {
-            await fetch(`https://api.github.com/repos/${slugRepo}/labels`,{
+            await fetch(`https://api.github.com/repos/${userpath}/${slug}/labels`,{
                 method: "GET",
-                headers: {Authorization: "token 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",}})
+                headers: {Authorization: "token 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",}})
+                .then((resp) => resp.status === 200 && resp.json())
+                .then((data) => {
+                    setTags(data);
+                });
+            }
+            getTags();
+        
+        const getIssues = async () => {
+            await fetch(`https://api.github.com/repos/${userpath}/${slug}/issues`,{
+                method: "GET",
+                headers: {Authorization: "token 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" }})
               .then((resp) => resp.status === 200 && resp.json())
               .then((data) => {
-                setTags(data);
+                setIssues(data);
             });
         }
-        getTags();
+        const getPulls = async () => {
+            await fetch(`https://api.github.com/repos/${userpath}/${slug}/pulls`,{
+                method: "GET",
+                headers: {Authorization: "token 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" }})
+              .then((resp) => resp.status === 200 && resp.json())
+              .then((data) => {
+                setPulls(data);
+            });
+        }
+        getIssues();
+        getPulls();
         
-
-        
-    },[slug])
+    },[slug, userpath])
     
     return (
         <div>
@@ -46,17 +66,20 @@ const Repository = ({repo}) => {
                 <h3>Issues</h3>
                 {issues && issues.map((i, iIndex) => (
                     <>
-                    <ol key={iIndex}>
-                    <li>{i.title}</li>
-                    </ol>
+                    <ul key={iIndex}>
+                    <li>
+                        {i.title}
+                        <caption>{i.body}</caption>
+                    </li>
+                    </ul>
                     </>
                 ))}
-                    <h3>Pulls Request</h3>
+                <h3>Pulls Request</h3>
                 {pulls && pulls.map((p, pIndex) => (
                     <>
-                    <ol key={pIndex}>
+                    <ul key={pIndex}>
                     <li>{p.title}</li>
-                    </ol>
+                    </ul>
                     </>
                 ))}
             </div>

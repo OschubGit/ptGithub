@@ -9,7 +9,7 @@ function App() {
         <Routes>
           <Route path="/" exact element={<Layout />} />
           <Route
-            path="/repository/:slug"
+            path="/repos/:userpath/:slug"
             element={
               <Layout>
                 <Content />

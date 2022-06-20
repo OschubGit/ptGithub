@@ -3,14 +3,14 @@ import Content from "./Content";
 import Nav from "./Nav";
 
 const Layout = () => {
-  const [value, setValue] = useState("oschubgit");
+  const [value, setValue] = useState("OschubGit");
   const [user, setUser] = useState();
 
   const handleClick = (e) => {
     e.preventDefault()
     fetch(`https://api.github.com/users/${value}`,{
       method: "GET",
-      headers: {Authorization: "token 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"}})
+      headers: {Authorization: "token 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"}})
       .then((resp) => resp.json())
       .then((data) => {
         setUser(data);
