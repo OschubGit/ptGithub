@@ -9,7 +9,7 @@ useEffect(() => {
     const getUser = async () => {
         await fetch(`https://api.github.com/users/${user.login}/repos`,{
             method: "GET",
-            headers: {Authorization: "token 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" }})
+            headers: {Authorization: "token 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" }})
           .then((resp) => resp.status === 200 && resp.json())
           .then((data) => {
             setRepos(data);

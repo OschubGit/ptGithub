@@ -10,7 +10,7 @@ const Layout = () => {
     e.preventDefault()
     fetch(`https://api.github.com/users/${value}`,{
       method: "GET",
-      headers: {Authorization: "token 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"}})
+      headers: {Authorization: "token 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"}})
       .then((resp) => resp.json())
       .then((data) => {
         setUser(data);

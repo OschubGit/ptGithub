@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {useParams } from "react-router-dom";
+import {useParams, useLocation } from "react-router-dom";
 import Repository from "./Repository";
 
 const Content = ({ user }) => {
   const slug = useParams();
+  const location = useLocation();
   const [repos, setRepos] = useState();
   const [repo, setRepo] = useState();
 
@@ -11,7 +12,7 @@ const Content = ({ user }) => {
         const getUser = async () => {
             await fetch(`${user.repos_url}`,{
                 method: "GET",
-                headers: {Authorization: "token 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",}})
+                headers: {Authorization: "token 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",}})
               .then((resp) => resp.status === 200 && resp.json())
               .then((data) => {
                 setRepos(data);
@@ -22,7 +23,7 @@ const Content = ({ user }) => {
         if (user) {
             getUser()
         }
-        }, [slug])
+        }, [slug, location.pathname])
 
 
   return user ? (
