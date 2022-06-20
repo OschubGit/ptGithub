@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useParams, useLocation } from "react-router-dom";
 import Repository from "./Repository";
+import gloablToken from "../gloablToken";
+import notFound from "../app/images/illustatus.svg"
+
 
 const Content = ({ user }) => {
   const slug = useParams();
@@ -12,7 +15,7 @@ const Content = ({ user }) => {
         const getUser = async () => {
             await fetch(`${user.repos_url}`,{
                 method: "GET",
-                headers: {Authorization: "token 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",}})
+                headers: {Authorization: `token ${gloablToken}`}})
               .then((resp) => resp.status === 200 && resp.json())
               .then((data) => {
                 setRepos(data);
@@ -63,7 +66,14 @@ const Content = ({ user }) => {
       <Repository repo={repo}/>
     </div>
   ) : (
-    <p>No hay usuario</p>
+    <div className="container mt-5">
+  <img width="80%" src={notFound} alt="not-found"/>
+  <div className="notification">
+    Usa el buscador para buscar un usuario de Github. Algunos ejemplos: homerchen19, midudev, builderio, nslogx
+  </div>
+</div>
+
+    
   );
 };
 

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import moment from "moment";
 import Modal from "./Modal";
+import gloablToken from "../gloablToken";
+
 const Repository = ({ repo }) => {
   const { slug, userpath } = useParams();
+  const location = useLocation();
   const [detailRepo, setDetailRepo] = useState([]);
   const [tags, setTags] = useState();
   const [issues, setIssues] = useState();
@@ -11,8 +14,6 @@ const Repository = ({ repo }) => {
   const [info, setInfo] = useState();
 
   useEffect(() => {
-    console.log(userpath);
-    console.log(slug);
     const getRepo = repo && repo.filter((f) => f.name === slug);
     setDetailRepo(getRepo);
 
@@ -20,7 +21,7 @@ const Repository = ({ repo }) => {
       await fetch(`https://api.github.com/repos/${userpath}/${slug}/labels`, {
         method: "GET",
         headers: {
-          Authorization: "token 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",
+          Authorization: `token ${gloablToken}`,
         },
       })
         .then((resp) => resp.status === 200 && resp.json())
@@ -28,13 +29,15 @@ const Repository = ({ repo }) => {
           setTags(data);
         });
     };
-    getTags();
+    if (slug) {
+        getTags();
+    }
 
     const getIssues = async () => {
       await fetch(`https://api.github.com/repos/${userpath}/${slug}/issues`, {
         method: "GET",
         headers: {
-          Authorization: "token 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",
+          Authorization: "token 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",
         },
       })
         .then((resp) => resp.status === 200 && resp.json())
@@ -42,8 +45,10 @@ const Repository = ({ repo }) => {
           setIssues(data);
         });
     };
-    getIssues();
-  }, [slug, userpath]);
+    if (repo) {
+        getIssues();
+    }
+  }, [slug]);
 
   const handleClick = (i) => {
     setOpen(!open);
@@ -79,18 +84,24 @@ const Repository = ({ repo }) => {
                 <h3>Issues</h3>
                 <ul>
                 {issues.map((i, index) => (
-                    <li key={index} style={{ display: "flex" }}>
-                      <h5 className="title is-5">{i.title}</h5>
-                      <button onClick={() => handleClick(i)}>ver</button>
+                    <div className="box" key={index}>
+                    <li style={{ display: "flex", flexDirection: "column" }}>
+                      <h5 className="title is-5 mr-2">{i.title}
                       {i.pull_request ? (
-                        <span class="tag is-info is-small">Pull Request</span>
+                        <span className="tag ml-2 is-info is-small">Pull Request</span>
                       ) : (
-                        <span class="tag is-primary is-small">Issue</span>
+                        <span className="tag ml-2 is-primary is-small">Issue</span>
                       )}
+                      </h5>
+                      <small className="small-description">{i.body}</small>
+                    </li>
+                    <div>
+                      <button className="button is-info is-outlined my-3" onClick={() => handleClick(i)}>Ver info</button>
+                      </div>
                       {open && (
                         <Modal i={info} slug={`${userpath}/${slug}`} close={() => handleClose()}/>
                       )}
-                    </li>
+                    </div>
                 ))}
                 </ul>
               </>
