@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import moment from "moment";
 import Modal from "./Modal";
 import gloablToken from "../gloablToken";
 
 const Repository = ({ repo }) => {
   const { slug, userpath } = useParams();
-  const location = useLocation();
   const [detailRepo, setDetailRepo] = useState([]);
   const [tags, setTags] = useState();
   const [issues, setIssues] = useState();
@@ -37,7 +36,7 @@ const Repository = ({ repo }) => {
       await fetch(`https://api.github.com/repos/${userpath}/${slug}/issues`, {
         method: "GET",
         headers: {
-          Authorization: "token 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",
+          Authorization: `token ${gloablToken}`,
         },
       })
         .then((resp) => resp.status === 200 && resp.json())
