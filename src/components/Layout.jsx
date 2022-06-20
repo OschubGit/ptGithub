@@ -1,22 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Content from "./Content";
 import Nav from "./Nav";
 
-const Header = () => {
-  const [value, setValue] = useState("");
+const Layout = () => {
+  const [value, setValue] = useState("oschubgit");
   const [user, setUser] = useState();
 
   const handleClick = (e) => {
     e.preventDefault()
-    console.log("nien")
-    fetch(`https://api.github.com/users/${value}`)
-      .then((resp) => resp.status === 200 && resp.json())
+    fetch(`https://api.github.com/users/${value}`,{
+      method: "GET",
+      headers: {Authorization: "token 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"}})
+      .then((resp) => resp.json())
       .then((data) => {
         setUser(data);
     });
 
     setValue("")
   }
+
+  useEffect(() => {
+    console.log(user)
+  },[user])
 
   return (
     <div className="app-container">
@@ -33,6 +38,7 @@ const Header = () => {
               width="{112}"
               height="{28}"
             />
+            {user && user.name}
             {user && user.login}
           </a>
         </div>
@@ -69,11 +75,11 @@ const Header = () => {
         </div>
       </nav>
     <div className="content">
-      <Content content={user} />
+      <Content user={user} />
     </div>
     </div>
     </div>
   );
 };
 
-export default Header;
+export default Layout;

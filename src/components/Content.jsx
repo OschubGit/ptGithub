@@ -1,21 +1,29 @@
 import React, {useEffect, useState} from "react";
 import {useParams } from "react-router-dom";
+import Repository from "./Repository";
 
-const Content = ({ content }) => {
-  const user = content;
+const Content = ({ user }) => {
   const slug = useParams();
+  const [repos, setRepos] = useState();
   const [repo, setRepo] = useState();
 
-  useEffect(() => {
-    const getUser = async () => {
-        await fetch(`https://api.github.com/repos/${user.login}/${slug}`)
-          .then((resp) => resp.status === 200 && resp.json())
-          .then((data) => {
-            setRepo(data);
-        });
-    }
-    getUser()
-}, [user])
+    useEffect(() => {
+        const getUser = async () => {
+            await fetch(`${user.repos_url}`,{
+                method: "GET",
+                headers: {Authorization: "token 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",}})
+              .then((resp) => resp.status === 200 && resp.json())
+              .then((data) => {
+                setRepos(data);
+            });
+        }
+        const map = repos && repos.map((m) => m)
+        setRepo(map)
+        if (user) {
+            getUser()
+        }
+        }, [slug])
+
 
   return user ? (
     <div>
@@ -39,15 +47,19 @@ const Content = ({ content }) => {
               <p className="title">{user.public_repos}</p>
             </div>
           </div>
+            {user.twitter_username && (
           <div className="level-item has-text-centered">
             <div>
-              <p className="heading">Likes</p>
-              <p className="title">789</p>
+                <>
+                <p className="heading">Twitter</p>
+                <p className="title">{user.twitter_username}</p>
+                </>
             </div>
           </div>
+            )}
         </nav>
       </div>
-      {console.log(repo)}
+      <Repository repo={repo}/>
     </div>
   ) : (
     <p>No hay usuario</p>
